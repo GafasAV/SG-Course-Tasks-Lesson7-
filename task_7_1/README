@@ -1,0 +1,46 @@
+Files destinations:
+|
++connectors:
+|
+|- connector_interface.py - Describe simple interface for creating unified DS class.
+|- psg_connector.py - Implement simple PostgreDB interface to save/load posts.
+|- mongo_connector.py - Implement simple MongoDB interface to save/load data.
+|- csv_connector.py - Implement simple CSV file interface to save/load data to csv-file.
+|- json_connector.py - Implement simple JSON file interface to save/load data to json-file.
+|
++simple_conn_testing_prg:
+|
+|-test_postgre.py - Simple application to test data SELECT from DB. Use PSGDataStore.
+|-test_mongo.py - Simple app to test data INSERT, FIND from MongoDB. Use MongoDataStore.
+|-test_csv.py - Simple app to read/write data to csv-file trough CSVDataStore.
+|-test_json.py - App to write/read data to json-file use JSONDataStore.
+|-test_config.py - App to test some methods from Configure() class.
+|
++main.py:
+|- Main program to get\load\parse\save posts.
+|
++data_store.py:
+|
+|- Describe and implement DS class fabric to create/connect/use different DS.
+|
++gui.ui:
+|
+|-QtDesigner programm Form template. Use this file to change UI.
+|
++_gui.py:
+|
+|-UI implemet as python class. Set all main UI params.
+|
++scraper.py:
+|
+|- Design and implements scraper logic. Scraper takes data from overclockers.ua,
+|- parse it for topics and return data list, included author name, post title,
+|- post hiper link, post.
+|
++config.py:
+|
+|- File contain class that implement methods to read and set Scraper params throw file.
+|
++config.cfg:
+|
+|- File contains main params for Scraper configuration.
