@@ -5,7 +5,12 @@ __author__ = "Andrew Gafiychuk"
 
 
 if __name__ == '__main__':
-    cfg = Configure(cfg_file="../config.cfg")
+    # Test Singleton also
+    cfg2 = Configure(file="../config.cfg")
+    print(cfg2._singleton_mark)
+
+    cfg = Configure(file="../config.cfg")
+    print(cfg._singleton_mark)
 
     cfg.show_config()
 
