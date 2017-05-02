@@ -1,8 +1,8 @@
 import logging
-
 import psycopg2
 
 from connectors.connector_interface import AbsStoreConnector
+
 
 __author__ = "Andrew Gafiychuk"
 
