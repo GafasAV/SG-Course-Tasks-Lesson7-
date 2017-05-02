@@ -10,17 +10,20 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Form(object):
+class Ui_MainWindow(object):
 
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(593, 505)
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(613, 551)
 
-        self.gridLayout = QtWidgets.QGridLayout(Form)
-        self.gridLayout.setObjectName("gridLayout")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
 
-        self.table = QtWidgets.QTableWidget(Form)
-        self.table.setObjectName("tableWidget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+
+        self.table = QtWidgets.QTableWidget(self.centralwidget)
+        self.table.setObjectName("table")
         self.table.setColumnCount(4)
         self.table.setRowCount(0)
 
@@ -31,87 +34,80 @@ class Ui_Form(object):
         item = QtWidgets.QTableWidgetItem()
         self.table.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
+
         self.table.setHorizontalHeaderItem(3, item)
+        self.verticalLayout_2.addWidget(self.table)
 
-        self.gridLayout.addWidget(self.table, 0, 0, 1, 3)
-        self.cmb = QtWidgets.QComboBox(Form)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cmb.sizePolicy().hasHeightForWidth())
+        self.cmb1 = QtWidgets.QComboBox(self.centralwidget)
+        self.cmb1.setObjectName("cmb1")
+        self.cmb1.addItem("")
+        self.cmb1.addItem("")
 
-        self.cmb.setSizePolicy(sizePolicy)
-        self.cmb.setObjectName("comboBox")
-        self.cmb.addItem("")
-        self.cmb.addItem("")
+        self.horizontalLayout.addWidget(self.cmb1)
+        self.btn_fill = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_fill.setObjectName("btn_fill")
 
-        self.gridLayout.addWidget(self.cmb, 1, 0, 1, 1)
-        self.btn_fill = QtWidgets.QPushButton(Form)
+        self.horizontalLayout.addWidget(self.btn_fill)
+        self.cmb2 = QtWidgets.QComboBox(self.centralwidget)
+        self.cmb2.setObjectName("cmb2")
+        self.cmb2.addItem("")
+        self.cmb2.addItem("")
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_fill.sizePolicy().hasHeightForWidth())
+        self.horizontalLayout.addWidget(self.cmb2)
+        self.btn_export = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_export.setObjectName("btn_export")
 
-        self.btn_fill.setSizePolicy(sizePolicy)
-        self.btn_fill.setObjectName("pushButton_2")
+        self.horizontalLayout.addWidget(self.btn_export)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
 
-        self.gridLayout.addWidget(self.btn_fill, 1, 1, 1, 1)
-        self.btn_export = QtWidgets.QPushButton(Form)
+        MainWindow.setCentralWidget(self.centralwidget)
 
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_export.sizePolicy().hasHeightForWidth())
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 613, 21))
+        self.menubar.setObjectName("menubar")
 
-        self.btn_export.setSizePolicy(sizePolicy)
-        self.btn_export.setObjectName("pushButton")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
 
-        self.gridLayout.addWidget(self.btn_export, 1, 2, 1, 1)
+        MainWindow.setStatusBar(self.statusbar)
 
-        self.btn_export.raise_()
-        self.btn_fill.raise_()
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.table.raise_()
-        self.cmb.raise_()
-
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
-
-    def retranslateUi(self, Form):
+    def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-
-        Form.setWindowTitle(_translate("Form", "Scraper v1.0"))
-        Form.setWindowIcon(QtGui.QIcon("src\scraper_ico.png"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Scraper DS reader v1.0"))
 
         item = self.table.horizontalHeaderItem(0)
-        item.setText(_translate("Form", "Author"))
-
+        item.setText(_translate("MainWindow", "Author"))
         item = self.table.horizontalHeaderItem(1)
-        item.setText(_translate("Form", "Title"))
-
+        item.setText(_translate("MainWindow", "Title"))
         item = self.table.horizontalHeaderItem(2)
-        item.setText(_translate("Form", "Link"))
-
+        item.setText(_translate("MainWindow", "Link"))
         item = self.table.horizontalHeaderItem(3)
-        item.setText(_translate("Form", "Post"))
 
-        self.cmb.setItemText(0, _translate("Form", "mongo"))
-        self.cmb.setItemText(1, _translate("Form", "postgre"))
+        item.setText(_translate("MainWindow", "Post"))
+        self.cmb1.setItemText(0, _translate("MainWindow", "mongo"))
+        self.cmb1.setItemText(1, _translate("MainWindow", "postgre"))
 
-        self.btn_fill.setText(_translate("Form", "-> Fill"))
-        self.btn_export.setText(_translate("Form", "Export to JSON"))
+        self.btn_fill.setText(_translate("MainWindow", "-> Fill"))
+        self.cmb2.setItemText(0, _translate("MainWindow", "csv"))
+        self.cmb2.setItemText(1, _translate("MainWindow", "json"))
+
+        self.btn_export.setText(_translate("MainWindow", "Export to JSON"))
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
-    Form = QtWidgets.QWidget()
-
-    ui = Ui_Form()
-    ui.setupUi(Form)
-
-    Form.show()
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
 
     sys.exit(app.exec_())
+

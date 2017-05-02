@@ -1,7 +1,7 @@
 import sys
 import logging
 
-from _gui import Ui_Form
+from _gui import Ui_MainWindow
 from data_store import DataStore
 from PyQt5 import QtWidgets, QtCore
 from config import Configure
@@ -45,27 +45,29 @@ class FillTableThread(QtCore.QThread):
 
 class ExportThread(QtCore.QThread):
     """
-    Class that implement data converting to JSON and save it
-    to file.
+    Class that implement data converting to JSON or CSV 
+    and save it to file.
+    Use QThread !!!
     
     """
     t_finish = QtCore.pyqtSignal()
 
-    def __init__(self, data, config):
+    def __init__(self, data, f_type, config):
         super(self.__class__, self).__init__()
 
+        self.f_type = f_type
         self.params = config.getConfiguration()
-        self.data_list = data
+        self.data = data
 
     def run(self):
         fact = DataStore()
-        fact.set_ds_type("json")
+        fact.set_ds_type(self.f_type)
 
         ds = fact.create_data_store()
-        ds.set_file(self.params["json"])
+        ds.set_file(self.params[self.f_type])
         ds.connect()
 
-        for row in self.data_list:
+        for row in self.data:
             ds.insert_unique(*row)
 
         self.sleep(2)
@@ -75,7 +77,7 @@ class ExportThread(QtCore.QThread):
         self.wait()
 
 
-class MainForm(QtWidgets.QMainWindow, Ui_Form):
+class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
     """
     Class that implementing software logic
     through the user interface form elements.
@@ -96,7 +98,7 @@ class MainForm(QtWidgets.QMainWindow, Ui_Form):
         Load data from selected data store and btn_fill table by it.
          
         """
-        store_type = self.cmb.currentText()
+        store_type = self.cmb1.currentText()
 
         self.set_disable()
 
@@ -112,12 +114,14 @@ class MainForm(QtWidgets.QMainWindow, Ui_Form):
         JSON file.
         
         """
+        format_type = self.cmb2.currentText()
+
         self.set_disable()
 
         if not self.data:
             print("[+]Not data to JSON Export")
 
-        self.exp_thread = ExportThread(self.data, self.config)
+        self.exp_thread = ExportThread(self.data, format_type, self.config)
         self.exp_thread.t_finish.connect(self.set_enable)
         self.exp_thread.start()
 
@@ -147,7 +151,8 @@ class MainForm(QtWidgets.QMainWindow, Ui_Form):
         """
         self.btn_fill.setEnabled(True)
         self.btn_export.setEnabled(True)
-        self.cmb.setEnabled(True)
+        self.cmb1.setEnabled(True)
+        self.cmb2.setEnabled(True)
 
     def set_disable(self):
         """
@@ -156,7 +161,8 @@ class MainForm(QtWidgets.QMainWindow, Ui_Form):
         """
         self.btn_fill.setDisabled(True)
         self.btn_export.setDisabled(True)
-        self.cmb.setDisabled(True)
+        self.cmb1.setDisabled(True)
+        self.cmb2.setDisabled(True)
 
 
 if __name__ == '__main__':
