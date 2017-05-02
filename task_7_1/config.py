@@ -1,4 +1,5 @@
 import json
+
 from patterns.singletone import Singleton
 
 
