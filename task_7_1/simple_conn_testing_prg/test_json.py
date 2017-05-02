@@ -1,5 +1,6 @@
 from connectors.json_connector import JSONDataStore
 
+
 __author__ = "Andrew Gafiychuk"
 
 
