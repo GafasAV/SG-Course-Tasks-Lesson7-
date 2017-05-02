@@ -1,5 +1,9 @@
 Files destinations:
 |
++patterns:
+|
+|- singleton.py - implement class, that describe Singleton pattern. One instance for one class!
+|
 +connectors:
 |
 |- connector_interface.py - Describe simple interface for creating unified DS class.
@@ -14,7 +18,7 @@ Files destinations:
 |-test_mongo.py - Simple app to test data INSERT, FIND from MongoDB. Use MongoDataStore.
 |-test_csv.py - Simple app to read/write data to csv-file trough CSVDataStore.
 |-test_json.py - App to write/read data to json-file use JSONDataStore.
-|-test_config.py - App to test some methods from Configure() class.
+|-test_config.py - App to test some methods from Configure() class. Singleton pattern test.
 |
 +main.py:
 |- Main program to get\load\parse\save posts.
@@ -39,7 +43,7 @@ Files destinations:
 |
 +config.py:
 |
-|- File contain class that implement methods to read and set Scraper params throw file.
+|- File contain class that implement methods to read and set Scraper params throw file. Use Singleton pattern!!!
 |
 +config.cfg:
 |
