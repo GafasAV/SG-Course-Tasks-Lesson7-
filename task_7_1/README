@@ -43,7 +43,8 @@ Files destinations:
 |
 +config.py:
 |
-|- File contain class that implement methods to read and set Scraper params throw file. Use Singleton pattern!!!
+|- File contain class that implement methods to read and set Scraper params throw file.
+|- Use Singleton pattern!!!
 |
 +config.cfg:
 |
