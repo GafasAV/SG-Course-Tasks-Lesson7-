@@ -1,9 +1,11 @@
 import json
+from patterns.singletone import Singleton
+
 
 __author__ = "Andrew Gafiychuk"
 
 
-class Configure(object):
+class Configure(Singleton, object):
     """
     Class used for configure some Scraper params, such as:
     files name, DB-name, table name, user login, password login, etc.
@@ -12,11 +14,14 @@ class Configure(object):
     Create it and set as cfg_file_name param.
     
     """
-    def __init__(self, cfg_file ="config.cfg"):
-        self.filename= cfg_file
+    def __init__(self, file ="config.cfg"):
+        self.filename= file
         self.params = None
 
         self._config_read()
+
+        # Testing param - remove later (Singleton pattern)
+        self._singleton_mark = "EXAMPLE=1"
 
     def _config_read(self):
         try:
