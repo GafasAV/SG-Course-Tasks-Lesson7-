@@ -6,84 +6,210 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>613</width>
-    <height>551</height>
+    <width>637</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Scraper DS reader v1.0</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QTableWidget" name="table">
-      <column>
-       <property name="text">
-        <string>Author</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Title</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Link</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Post</string>
-       </property>
-      </column>
+     <widget class="QTabWidget" name="main_tab">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_scraper">
+       <attribute name="title">
+        <string>Scraper</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTableWidget" name="table_scrap">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <column>
+           <property name="text">
+            <string>Author</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Title</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Link</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Post</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Page count</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="page_count_box"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_scrapp">
+            <property name="text">
+             <string>Scrapp...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cmb_ds">
+            <item>
+             <property name="text">
+              <string>postgre</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>mongo</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>json</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>csv</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_save">
+            <property name="text">
+             <string>Save</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_export">
+       <attribute name="title">
+        <string>Export</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QTableWidget" name="table_export">
+          <column>
+           <property name="text">
+            <string>Author</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Title</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Link</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Post</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cmb_exp">
+            <item>
+             <property name="text">
+              <string>postgre</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>mongo</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_fill">
+            <property name="text">
+             <string>-&gt; Fill</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cmb_save">
+            <item>
+             <property name="text">
+              <string>json</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>csv</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_exp">
+            <property name="text">
+             <string>-&gt;Export...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QComboBox" name="cmb1">
-        <item>
-         <property name="text">
-          <string>mongo</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>postgre</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_fill">
-        <property name="text">
-         <string>-&gt; Fill</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="cmb2">
-        <item>
-         <property name="text">
-          <string>csv</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>json</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_export">
-        <property name="text">
-         <string>Export to JSON</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>
@@ -92,7 +218,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>613</width>
+     <width>637</width>
      <height>21</height>
     </rect>
    </property>
