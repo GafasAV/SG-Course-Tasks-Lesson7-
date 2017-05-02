@@ -45,6 +45,7 @@ class DataStore(object):
             logging.debug("[+]DS created - {0}"
                           .format(self.ds_type))
 
+            # forget to pass db settings to db class init?
             return datastore()
         else:
             print("[ERR:]Unknown DS type.\n"

@@ -51,6 +51,7 @@ class PSGDataStore(AbsStoreConnector, object):
         logging.debug("[+]DB Connecting...")
 
         try:
+            print(self.db_name, self.user, self.passwd, self.host)
             self.conn = psycopg2.connect(database=self.db_name,
                                          user=self.user,
                                          password=self.passwd,
