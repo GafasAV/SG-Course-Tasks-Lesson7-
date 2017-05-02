@@ -84,7 +84,9 @@ class Scraper(object):
         """
         logging.debug("[+]Starts _main even_loop...")
 
-        event_loop = asyncio.get_event_loop()
+        # event_loop = asyncio.get_event_loop()
+        event_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(event_loop)
 
         try:
             event_loop.run_until_complete(self._create_session())

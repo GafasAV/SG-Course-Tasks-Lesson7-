@@ -10,6 +10,26 @@ from scraper import Scraper
 
 __author__ = "Andrew Gafiychuk"
 
+class ScraperThread(QtCore.QThread):
+
+    send_data = QtCore.pyqtSignal(object)
+
+    def __init__(self, page_count):
+        super(self.__class__, self).__init__()
+        self.page_count = page_count
+
+    def run(self):
+        try:
+            sc = Scraper(self.page_count)
+            data = sc.start()
+            self.send_data.emit(data)
+        except Exception as err:
+            print(err)
+
+    def __del__(self):
+        self.wait()
+
+
 
 class FillTableThread(QtCore.QThread):
     """
@@ -63,23 +83,26 @@ class ExportThread(QtCore.QThread):
         self.data = data
 
     def run(self):
-        fact = DataStore()
-        fact.set_ds_type(self.f_type)
+        try:
+            fact = DataStore()
+            fact.set_ds_type(self.f_type)
 
-        ds = fact.create_data_store()
+            ds = fact.create_data_store()
 
-        if self.f_type == "json" or self.f_type == "csv":
-            ds.set_file(self.params[self.f_type])
-        if self.f_type == "postgre" or self.f_type == "mongo":
-            ds.set_table(self.params["table"])
+            if self.f_type == "json" or self.f_type == "csv":
+                ds.set_file(self.params[self.f_type])
+            if self.f_type == "postgre" or self.f_type == "mongo":
+                ds.set_table(self.params["table"])
 
-        ds.connect()
+            ds.connect()
 
-        for row in self.data:
-            ds.insert_unique(*row)
+            for row in self.data:
+                ds.insert_unique(*row)
 
-        self.sleep(2)
-        self.t_finish.emit()
+            self.sleep(2)
+            self.t_finish.emit()
+        except Exception as err:
+            print(err)
 
     def __del__(self):
         self.wait()
@@ -146,9 +169,12 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
             print("[+]No data to Saving...")
             return
 
-        self.exp_thread = ExportThread(self.data, f_type, self.config)
-        self.exp_thread.t_finish.connect(self.set_enable)
-        self.exp_thread.start()
+        try:
+            self.exp_thread = ExportThread(self.data, f_type, self.config)
+            self.exp_thread.t_finish.connect(self.set_enable)
+            self.exp_thread.start()
+        except Exception as err:
+            print(err)
 
     def scrap(self):
         self.set_disable()
@@ -160,12 +186,19 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         if page_count <= 0:
             page_count = 1
 
-        sc = Scraper(page_count)
-        self.data = sc.start()
+        try:
+            self.scrap_thread = ScraperThread(page_count)
+            # self.scrap_thread.t_finish.connect(self._fill_scrap_table)
+            self.scrap_thread.send_data.connect(self._fill_scrap_table)
+            self.scrap_thread.start()
+        except Exception as err:
+            print(err)
 
-        self._fill_scrap_table()
+        # self._fill_scrap_table()
 
-    def _fill_scrap_table(self):
+
+    def _fill_scrap_table(self, data):
+        self.data = data
         self.table_scrap.setRowCount(len(self.data))
         for num, row in enumerate(self.data):
             self.table_scrap.setItem(num, 0,
