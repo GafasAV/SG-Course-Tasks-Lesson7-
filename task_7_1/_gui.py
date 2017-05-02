@@ -99,7 +99,7 @@ class Ui_MainWindow(object):
         self.cmb2.setItemText(0, _translate("MainWindow", "csv"))
         self.cmb2.setItemText(1, _translate("MainWindow", "json"))
 
-        self.btn_export.setText(_translate("MainWindow", "Export to JSON"))
+        self.btn_export.setText(_translate("MainWindow", "-> Export"))
 
 
 if __name__ == "__main__":
