@@ -3,6 +3,7 @@ import logging
 
 from connectors.connector_interface import AbsStoreConnector
 
+
 __author__ = "Andrew Gafiychuk"
 
 
