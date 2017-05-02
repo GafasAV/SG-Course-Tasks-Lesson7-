@@ -81,6 +81,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Scraper DS reader v1.0"))
+        MainWindow.setWindowIcon(QtGui.QIcon("src\scraper_ico.png"))
 
         item = self.table.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Author"))
