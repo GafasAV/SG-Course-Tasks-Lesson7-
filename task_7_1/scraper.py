@@ -245,6 +245,8 @@ if __name__ == "__main__":
     #Set DS type as csv file and write all remaining records.
     data_store.set_ds_type("csv")
     ds = data_store.create_data_store()
+    ds.connect()
+    
     for row in data[22:]:
         ds.insert_unique(*row)
 
