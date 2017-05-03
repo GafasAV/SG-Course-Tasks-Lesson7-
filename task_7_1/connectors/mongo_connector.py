@@ -76,6 +76,8 @@ class MongoDataStore(AbsStoreConnector, object):
         
         """
         self.db = self.client[self.db_name]
+        #self.db.authenticate(self.user, self.passwd)
+        
         self.coll = self.db[self.collection_name]
 
         # Unique record post by hiper-link
