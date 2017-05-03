@@ -61,7 +61,7 @@ class MongoDataStore(AbsStoreConnector, object):
         """
         try:
             self.client = pymongo.MongoClient(
-                host=self.host, port=self.port)
+                host=self.host, port=int(self.port))
 
             self._create_collection()
             logging.debug("[+]MongoDB connected!!!")
