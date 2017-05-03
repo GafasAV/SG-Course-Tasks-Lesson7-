@@ -22,15 +22,18 @@ class PSGDataStore(AbsStoreConnector, object):
     """
     def __init__(self,
                  user="postgres", password="12345",
-                 host="localhost", db_name="postgres",
-                 table="overclockers"):
+                 host="localhost", port="5432",
+                 db_name="postgres", table="overclockers"):
         """
         Init DB params for connecting.
         
         """
         self.user = user
         self.passwd = password
+
         self.host = host
+        self.port = port
+
         self.db_name = db_name
         self.table = table
 
@@ -51,11 +54,12 @@ class PSGDataStore(AbsStoreConnector, object):
         logging.debug("[+]DB Connecting...")
 
         try:
-            print(self.db_name, self.user, self.passwd, self.host)
+            #print(self.db_name, self.user, self.passwd, self.host)
             self.conn = psycopg2.connect(database=self.db_name,
                                          user=self.user,
                                          password=self.passwd,
-                                         host=self.host)
+                                         host=self.host,
+                                         port=self.port)
 
             self.cursor = self.conn.cursor()
             self._create_table()
@@ -171,26 +175,6 @@ class PSGDataStore(AbsStoreConnector, object):
                           "{0}".format(db_err.pgerror))
             logging.error(db_err.diag.message_primary)
 
-    def set_db(self, name):
-        """
-        Use this method to change target PostgreDB.
-        
-        """
-        if not isinstance(name, str):
-            raise TypeError("[+]Name must be a string!!!")
-        else:
-            self.db_name = name
-
-    def set_table(self, name):
-        """
-        Use this method for change target Table in PostgreDB.
-         
-        """
-        if not isinstance(name, str):
-            raise TypeError("[+]Name must be a string!!!")
-        else:
-            self.table = name
-
     def filter_data(self, data):
         clear_list = []
 
@@ -198,3 +182,60 @@ class PSGDataStore(AbsStoreConnector, object):
             clear_list.append((*record[1:],))
 
         return clear_list
+
+    def set_user(self, user_name):
+        """
+        Setting User name DB param.
+
+        """
+        if not isinstance(user_name, str):
+            raise TypeError("[+]User name must be string!!!")
+        else:
+            self.user = user_name
+
+    def set_password(self, password):
+        """
+        Setting the DB password param.
+
+        """
+        if not isinstance(password, str):
+            raise TypeError("[+]Set DB password as string!!!")
+        else:
+            self.passwd = password
+
+    def set_host(self, host):
+        """
+        Setting the host addr for DB.
+
+        """
+        if not isinstance(host, str):
+            raise TypeError("[+]Set Host name as string!!!")
+        else:
+            self.host = host
+
+    def set_port(self, port):
+        """
+        Setting DB connection port param.
+
+        """
+        self.port = port
+
+    def set_db(self, db_name):
+        """
+        Use this method to change DB name for data storing.
+
+        """
+        if not isinstance(db_name, str):
+            raise TypeError("[+]Name must be a string!!!")
+        else:
+            self.db_name = db_name
+
+    def set_table(self, table_name):
+        """
+        Use this method to change COLLECTION for data CRUD.
+
+        """
+        if not isinstance(table_name, str):
+            raise TypeError("[+]Name must be a string!!!")
+        else:
+            self.collection_name = table_name

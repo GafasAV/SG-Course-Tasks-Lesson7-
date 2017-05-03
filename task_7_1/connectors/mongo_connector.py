@@ -26,13 +26,19 @@ class MongoDataStore(AbsStoreConnector, object):
     set_table() - Allows to change target DB Table.
     
     """
-    def __init__(self, host="localhost",
+    def __init__(self, user="mongo", password="12345",
+                 host="localhost", port="27017",
                  db_name="overclockers", table="overclockers"):
         """
         Init all params for connecting to MongoDB.
 
         """
+        self.user = user
+        self.passwd = password
+
         self.host = host
+        self.port = port
+
         self.db_name = db_name
         self.collection_name = table
 
@@ -55,7 +61,7 @@ class MongoDataStore(AbsStoreConnector, object):
         """
         try:
             self.client = pymongo.MongoClient(
-                host=self.host, port=27017)
+                host=self.host, port=self.port)
 
             self._create_collection()
             logging.debug("[+]MongoDB connected!!!")
@@ -126,22 +132,59 @@ class MongoDataStore(AbsStoreConnector, object):
         except:
             logging.error("[+]Get data error...\n")
 
-    def set_db(self, name):
+    def set_user(self, user_name):
+        """
+        Setting User name DB param.
+        
+        """
+        if not isinstance(user_name, str):
+            raise TypeError("[+]User name must be string!!!")
+        else:
+            self.user = user_name
+
+    def set_password(self, password):
+        """
+        Setting the DB password param.
+        
+        """
+        if not isinstance(password, str):
+            raise TypeError("[+]Set DB password as string!!!")
+        else:
+            self.passwd = password
+
+    def set_host(self, host):
+        """
+        Setting the host addr for DB.
+        
+        """
+        if not isinstance(host, str):
+            raise TypeError("[+]Set Host name as string!!!")
+        else:
+            self.host = host
+
+    def set_port(self, port):
+        """
+        Setting DB connection port param.
+         
+        """
+        self.port = port
+
+    def set_db(self, db_name):
         """
         Use this method to change DB name for data storing.
         
         """
-        if not isinstance(name, str):
+        if not isinstance(db_name, str):
             raise TypeError("[+]Name must be a string!!!")
         else:
-            self.db_name = name
+            self.db_name = db_name
 
-    def set_table(self, name):
+    def set_table(self, table_name):
         """
         Use this method to change COLLECTION for data CRUD.
 
         """
-        if not isinstance(name, str):
+        if not isinstance(table_name, str):
             raise TypeError("[+]Name must be a string!!!")
         else:
-            self.collection_name = name
+            self.collection_name = table_name
