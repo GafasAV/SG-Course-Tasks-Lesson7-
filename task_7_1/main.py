@@ -70,7 +70,7 @@ class FillTableThread(QtCore.QThread):
             ds.set_user(self.params["user"])
             ds.set_password(self.params["password"])
             ds.set_host(self.params["host"])
-            ds.set_port(self.params["port"])
+            #ds.set_port(self.params["port"])//use default system port
             ds.set_db(self.params["db_name"])
             ds.set_table(self.params["table"])
 
@@ -120,7 +120,7 @@ class ExportThread(QtCore.QThread):
                 ds.set_user(self.params["user"])
                 ds.set_password(self.params["password"])
                 ds.set_host(self.params["host"])
-                ds.set_port(self.params["port"])
+                #ds.set_port(self.params["port"])//use default system port
                 ds.set_db(self.params["db_name"])
                 ds.set_table(self.params["table"])
 
