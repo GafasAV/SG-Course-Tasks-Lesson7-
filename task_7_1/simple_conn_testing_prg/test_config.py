@@ -11,7 +11,9 @@ if __name__ == '__main__':
 
     cfg = Configure(file="../config.cfg")
     print(cfg._singleton_mark)
-
+    
+    print(cfg2 is cfg) # Must be a True
+    
     cfg.show_config()
 
     config = cfg.getConfiguration()
