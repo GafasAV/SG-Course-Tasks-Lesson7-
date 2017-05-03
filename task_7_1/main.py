@@ -8,27 +8,40 @@ from config import Configure
 from PyQt5 import QtCore, QtWidgets
 from scraper import Scraper
 
+
 __author__ = "Andrew Gafiychuk"
 
-class ScraperThread(QtCore.QThread):
 
+class ScraperThread(QtCore.QThread):
+    """
+    Class implement Scrappint the overclockers.ua and
+    fill the table by it data.
+    Use QThread.
+    
+    """
     send_data = QtCore.pyqtSignal(object)
+    t_finish = QtCore.pyqtSignal()
 
     def __init__(self, page_count):
         super(self.__class__, self).__init__()
+
         self.page_count = page_count
 
     def run(self):
         try:
             sc = Scraper(self.page_count)
             data = sc.start()
+
             self.send_data.emit(data)
+
         except Exception as err:
             print(err)
 
+        finally:
+            self.t_finish.emit()
+
     def __del__(self):
         self.wait()
-
 
 
 class FillTableThread(QtCore.QThread):
@@ -48,19 +61,31 @@ class FillTableThread(QtCore.QThread):
         self.params = config.getConfiguration()
 
     def run(self):
-        fact = DataStore()
-        fact.set_ds_type(self.ds_type)
+        try:
+            fact = DataStore()
+            fact.set_ds_type(self.ds_type)
 
-        ds = fact.create_data_store()
-        ds.set_table(self.params["table"])
-        ds.connect()
+            ds = fact.create_data_store()
 
-        data = ds.get_all_data()
+            ds.set_user(self.params["user"])
+            ds.set_password(self.params["password"])
+            ds.set_host(self.params["host"])
+            ds.set_port(self.params["port"])
+            ds.set_db(self.params["db_name"])
+            ds.set_table(self.params["table"])
 
-        self.fill_table.emit(data)
-        self.sleep(2)
+            ds.connect()
 
-        self.t_finish.emit()
+            data = ds.get_all_data()
+
+            self.fill_table.emit(data)
+            self.sleep(2)
+
+        except Exception as err:
+            print(err)
+
+        finally:
+            self.t_finish.emit()
 
     def __del__(self):
         self.wait()
@@ -92,6 +117,11 @@ class ExportThread(QtCore.QThread):
             if self.f_type == "json" or self.f_type == "csv":
                 ds.set_file(self.params[self.f_type])
             if self.f_type == "postgre" or self.f_type == "mongo":
+                ds.set_user(self.params["user"])
+                ds.set_password(self.params["password"])
+                ds.set_host(self.params["host"])
+                ds.set_port(self.params["port"])
+                ds.set_db(self.params["db_name"])
                 ds.set_table(self.params["table"])
 
             ds.connect()
@@ -100,9 +130,12 @@ class ExportThread(QtCore.QThread):
                 ds.insert_unique(*row)
 
             self.sleep(2)
-            self.t_finish.emit()
+
         except Exception as err:
             print(err)
+
+        finally:
+            self.t_finish.emit()
 
     def __del__(self):
         self.wait()
@@ -130,23 +163,33 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         Press 'Fill' key to call this method.
         Load data from selected data store and btn_fill table by it.
-
+        Use QThread
+        
         """
         self.set_disable()
 
         store_type = self.cmb_exp.currentText()
 
-        self.fill_thread = FillTableThread(store_type, self.config)
-        self.fill_thread.fill_table.connect(self._fill_table)
-        self.fill_thread.t_finish.connect(self.set_enable)
-        self.fill_thread.start()
+        try:
+            self.fill_thread = FillTableThread(
+                store_type, self.config)
+            self.fill_thread.fill_table.connect(
+                self._fill_table)
+            self.fill_thread.t_finish.connect(
+                self.set_enable)
+            self.fill_thread.start()
+
+        except Exception as err:
+            print("Fill method error...\n"
+                  "{0}".format(err))
 
     def export(self):
         """
         Press 'Export to JSON' key to call this method.
         Method takes all loaded data? convert and save it to
         JSON file.
-
+        Use QThread.
+        
         """
         self.set_disable()
 
@@ -155,12 +198,23 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         if not self.data:
             print("[+]Not data to Export...")
             return
+        try:
+            self.exp_thread = ExportThread(
+                self.data, f_type, self.config)
+            self.exp_thread.t_finish.connect(
+                self.set_enable)
+            self.exp_thread.start()
 
-        self.exp_thread = ExportThread(self.data, f_type, self.config)
-        self.exp_thread.t_finish.connect(self.set_enable)
-        self.exp_thread.start()
+        except Exception as err:
+            print("Export error...\n"
+                  "{0}".format(err))
 
     def save(self):
+        """
+        Method for saving Scrap results to DB.
+        Works throw QThread.
+        
+        """
         self.set_disable()
 
         f_type = self.cmb_ds.currentText()
@@ -170,13 +224,23 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         try:
-            self.exp_thread = ExportThread(self.data, f_type, self.config)
-            self.exp_thread.t_finish.connect(self.set_enable)
+            self.exp_thread = ExportThread(
+                self.data, f_type, self.config)
+            self.exp_thread.t_finish.connect(
+                self.set_enable)
             self.exp_thread.start()
+
         except Exception as err:
-            print(err)
+            print("Save data error...\n"
+                  "{0}".format(err))
 
     def scrap(self):
+        """
+        Method start scrap.py script for scrap data from site.
+        Takes data, parse, structer it and fill table.
+        Use QThread.
+        
+        """
         self.set_disable()
 
         sleep(1)
@@ -188,34 +252,38 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
 
         try:
             self.scrap_thread = ScraperThread(page_count)
-            # self.scrap_thread.t_finish.connect(self._fill_scrap_table)
-            self.scrap_thread.send_data.connect(self._fill_scrap_table)
+            self.scrap_thread.send_data.connect(
+                self._fill_scrap_table)
+            self.scrap_thread.t_finish.connect(
+                self.set_enable)
             self.scrap_thread.start()
+
         except Exception as err:
-            print(err)
-
-        # self._fill_scrap_table()
-
+            print("Scraper error...\n"
+                  "{0}".format(err))
 
     def _fill_scrap_table(self, data):
+        """
+        Fill Table by Scraper result data.
+        Tab Scraper.
+        
+        """
         self.data = data
         self.table_scrap.setRowCount(len(self.data))
         for num, row in enumerate(self.data):
-            self.table_scrap.setItem(num, 0,
-                                      QtWidgets.QTableWidgetItem(row[0]))
-            self.table_scrap.setItem(num, 1,
-                                      QtWidgets.QTableWidgetItem(row[1]))
-            self.table_scrap.setItem(num, 2,
-                                      QtWidgets.QTableWidgetItem(row[2]))
-            self.table_scrap.setItem(num, 3,
-                                      QtWidgets.QTableWidgetItem(row[3]))
-
-        self.set_enable()
+            self.table_scrap.setItem(
+                num, 0, QtWidgets.QTableWidgetItem(row[0]))
+            self.table_scrap.setItem(
+                num, 1, QtWidgets.QTableWidgetItem(row[1]))
+            self.table_scrap.setItem(
+                num, 2, QtWidgets.QTableWidgetItem(row[2]))
+            self.table_scrap.setItem(
+                num, 3, QtWidgets.QTableWidgetItem(row[3]))
 
     def _fill_table(self, data_list):
         """
-        Private method to load data 
-        throw thread,used QThread class.
+        Fill table by data from DB.
+        Tab Export.
 
         """
         self.data = data_list
